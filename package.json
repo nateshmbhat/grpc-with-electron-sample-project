@@ -2,9 +2,6 @@
   "name": "svelte-app",
   "version": "1.0.0",
   "main": "./src/app/electron.js",
-  "externals":[
-    "grpc"
-  ],
   "devDependencies": {
     "@tsconfig/svelte": "^1.0.10",
     "cross-env": "^5.2.1",
@@ -35,7 +32,8 @@
     "electron-dev": "cross-env NODE_ENV=development run-p dev electron-run"
   },
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.0",
-    "grpc": "^1.24.3"
+    "@grpc/grpc-js": "^1.1.7",
+    "bloomrpc-mock": "^0.3.1",
+    "electron-squirrel-startup": "^1.0.0"
   }
 }

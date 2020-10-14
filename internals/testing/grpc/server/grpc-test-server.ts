@@ -1,4 +1,4 @@
-import type { PackageDefinition } from "grpc";
+import type { PackageDefinition } from "@grpc/grpc-js/build/src/make-client";
 
 var PROTO_PATH = __dirname + '/../protos/greeter-service.proto';
 
@@ -34,3 +34,5 @@ function main() {
 }
 
 main();
+
+export {}

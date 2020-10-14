@@ -1,10 +1,11 @@
 <script lang="ts">
+  import { importAndParseProto } from "./behavior/protoImporter";
+
   export let name: string = "hello";
-  import { readdirSync } from "fs";
   let files: string[] = [];
 
   const loadFiles = (e) => {
-    files = readdirSync(".");
+    importAndParseProto();
   };
 </script>
 

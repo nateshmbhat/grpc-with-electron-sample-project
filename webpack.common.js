@@ -11,7 +11,7 @@ module.exports = {
 		alias: {
 			svelte: path.resolve('node_modules', 'svelte')
 		},
-		extensions: ['.mjs', '.js', '.svelte'],
+		extensions: ['.mjs', '.js', '.svelte','.ts'],
 		mainFields: ['svelte', 'browser', 'module', 'main']
 	},
 	target: 'electron-renderer',

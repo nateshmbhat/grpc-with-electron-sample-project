@@ -1,6 +1,6 @@
 var PROTO_PATH = __dirname + "/../protos/greeter-service.proto";
 
-import {loadPackageDefinition , credentials } from 'grpc'
+import {loadPackageDefinition , credentials } from '@grpc/grpc-js'
 var protoLoader = require("@grpc/proto-loader");
 var packageDefinition = protoLoader.loadSync(PROTO_PATH, {
   keepCase: true,
@@ -29,3 +29,5 @@ function main() {
 }
 
 main();
+
+export {}

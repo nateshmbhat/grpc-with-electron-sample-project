@@ -13,9 +13,6 @@ module.exports = merge(webpackCommonConfig, {
 		path: path.resolve(__dirname, 'public'),
 		filename: 'bundle.js',
 	},
-	externals: [
-		'grpc'
-	],
 	module: {
 		rules: [{
 			test: /\.css$/,
