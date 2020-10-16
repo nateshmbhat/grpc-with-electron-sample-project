@@ -1,24 +1,18 @@
 {
-  "name": "bloomrpc",
-  "productName": "bloom-rpc-client",
+  "name": "tap-wire",
+  "productName": "tap-wire",
   "version": "1.4.1",
   "description": "GRPC GUI client",
   "main": "./main.prod.js",
   "author": {
-    "name": "Fabrizio Fenoglio",
-    "email": "fabri.feno@gmail.com",
-    "url": "https://github.com/fenos"
+    "name": "nateshmbhat",
+    "email": "nateshmbhat1@gmail.com",
+    "url": "https://github.com/nateshmbhat"
   },
   "scripts": {
     "electron-rebuild": "node ../internals/scripts/ElectronRebuild.js",
     "postinstall": "yarn electron-rebuild --version=6.1.7"
   },
-  "externals": [
-    "grpc"
-  ],
   "license": "LGPL3",
-  "dependencies": {
-    "bloomrpc-mock": "0.3.1",
-    "grpc": "1.24.2"
-  }
+  "dependencies": {}
 }

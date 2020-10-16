@@ -65,7 +65,6 @@ module.exports = merge.smart(baseConfig, {
    * If you run the bundle in node.js it falls back to these values of node.js.
    * https://github.com/webpack/webpack/issues/2010
    */
-  externals: ['grpc'],
   node: {
     __dirname: false,
     __filename: false

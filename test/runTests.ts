@@ -13,3 +13,5 @@ const result = spawn.sync(
 );
 
 process.exit(result.status);
+
+export {}

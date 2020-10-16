@@ -28,16 +28,28 @@ function filterDepWithoutEntryPoints(dep) {
   }
 }
 
+/** @type {webpack.Configuration} */
 module.exports = {
   externals: [
     ...Object.keys(appDep.externals || {}),
     ...Object.keys(pkgDep.possibleExternals || {}).filter(filterDepWithoutEntryPoints)
   ],
-
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
+        test: /\.(svelte)$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'svelte-loader',
+          options: {
+            emitCss: true,
+            preprocess: require('svelte-preprocess')(),
+            hotReload: true
+          }
+        }
+      },
+      {
+        test: /\.ts?$/,
         loaders: ['ts-loader'],
         exclude: /node_modules/
       }
@@ -54,7 +66,7 @@ module.exports = {
    * Determine the array of extensions that should be used to resolve modules.
    */
   resolve: {
-    extensions: ['.js', '.jsx', '.json', '.ts', '.tsx'],
+    extensions: ['.js', '.json', '.ts', 'svelte'],
     modules: [path.join(__dirname, 'app'), 'node_modules']
   },
 

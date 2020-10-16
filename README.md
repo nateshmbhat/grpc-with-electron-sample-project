@@ -58,7 +58,7 @@ The app will get installed and copied to the path `/Applications/BloomRPC.app`
 ### Build from source:
 
 ```
-git clone https://github.com/uw-labs/bloomrpc.git
+git clone https://github.com/nateshmbhat/tap-wire.git
 cd bloomrpc
 
 yarn install && ./node_modules/.bin/electron-rebuild

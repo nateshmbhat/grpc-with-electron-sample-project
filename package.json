@@ -1,8 +1,8 @@
 {
-  "name": "bloomrpc",
-  "productName": "BloomRPC",
+  "name": "tap-wire",
+  "productName": "TapWire",
   "version": "1.4.1",
-  "description": "GRPC GUI client",
+  "description": "Api interceptor and modifier",
   "main": "main.js",
   "scripts": {
     "build": "concurrently \"yarn build-main\" \"yarn build-renderer\"",
@@ -25,7 +25,7 @@
     "test-watch": "yarn test --watch"
   },
   "lint-staged": {
-    "*.(js|jsx)": [
+    "*.(js)": [
       "prettier --ignore-path .eslintignore --single-quote --write",
       "git add"
     ],
@@ -35,8 +35,8 @@
     ]
   },
   "build": {
-    "productName": "BloomRPC",
-    "appId": "io.github.utilitywarehouse.BloomRPC",
+    "productName": "Tap Wire",
+    "appId": "io.github.utilitywarehouse.tapWire",
     "extraResources": [
       {
         "from": "static",
@@ -92,14 +92,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/uw-labs/bloomrpc.git"
+    "url": "git+https://github.com/nateshmbhat/tap-wire.git"
   },
   "author": {
-    "name": "Fabrizio Fenoglio (UtilityWarehouse)"
+    "name": "Natesh Bhat"
   },
   "license": "LGPL-3.0-or-later",
   "bugs": {
-    "url": "https://github.com/uw-labs/bloomrpc/issues"
+    "url": "https://github.com/nateshmbhat/tap-wire/issues"
   },
   "keywords": [
     "gRPC",
@@ -108,7 +108,7 @@
     "BloomRPC",
     "gRPC GUI"
   ],
-  "homepage": "https://github.com/uw-labs/bloomrpc",
+  "homepage": "https://github.com/nateshmbhat/tap-wire",
   "jest": {
     "testURL": "http://localhost/",
     "moduleNameMapper": {
@@ -117,10 +117,9 @@
     },
     "moduleFileExtensions": [
       "js",
-      "jsx",
       "json",
       "ts",
-      "tsx"
+      "svelte"
     ],
     "testMatch": [
       "**/__tests__/**/*.(js?(x)|ts?(x))",
@@ -142,18 +141,20 @@
     "@types/detect-port": "^1.1.0",
     "@types/electron-store": "^1.3.1",
     "@types/enzyme": "^3.9.0",
-    "@types/enzyme-adapter-react-16": "^1.0.5",
     "@types/history": "^4.7.2",
     "@types/jest": "^24.0.9",
     "@types/jsdom": "^12.2.3",
     "@types/mousetrap": "^1.6.1",
     "@types/node": "^12.4.0",
-    "@types/react": "^16.8.7",
-    "@types/react-dom": "^16.8.2",
-    "@types/react-hot-loader": "^4.1.0",
-    "@types/react-test-renderer": "^16.8.1",
     "@types/sinon": "^7.0.9",
+    "@types/uuid": "^7.0.2",
     "@types/webdriverio": "^5.0.0",
+    "@types/webpack": "^4.41.22",
+    "@tsconfig/svelte": "^1.0.10",
+    "svelte": "^3.0.0",
+    "svelte-check": "^1.0.55",
+    "svelte-loader": "2.13.3",
+    "svelte-preprocess": "^4.5.1",
     "asar": "^1.0.0",
     "chalk": "^2.4.2",
     "concurrently": "^4.1.0",
@@ -169,7 +170,6 @@
     "electron-devtools-installer": "^2.2.4",
     "electron-rebuild": "^1.10.0",
     "enzyme": "^3.9.0",
-    "enzyme-adapter-react-16": "^1.10.0",
     "enzyme-to-json": "^3.3.5",
     "express": "^4.16.4",
     "extract-text-webpack-plugin": "^3.0.2",
@@ -184,7 +184,6 @@
     "npm-logical-tree": "^1.2.1",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
     "prettier": "^1.16.4",
-    "react-hot-loader": "^4.8.0",
     "rimraf": "^2.6.3",
     "sass-loader": "^7.1.0",
     "sinon": "^7.2.7",
@@ -205,19 +204,13 @@
     "yarn": "^1.22.0"
   },
   "dependencies": {
-    "@types/uuid": "^7.0.2",
-    "antd": "3.26.7",
-    "array-move": "^2.1.0",
+    "@grpc/grpc-js": "^1.1.7",
+    "bloomrpc-mock-js": "^1.3.1",
     "electron-store": "^2.0.0",
     "lodash.get": "^4.4.2",
     "mousetrap": "^1.6.3",
     "protobufjs": "^6.8.8",
     "re-resizable": "^4.11.0",
-    "react": "^16.8.4",
-    "react-ace": "^6.4.0",
-    "react-dom": "^16.8.4",
-    "react-sortable-hoc": "^1.9.1",
-    "react-test-renderer": "^16.8.4",
     "source-map-support": "^0.5.10",
     "terser-webpack-plugin": "^1.2.3",
     "uuid": "^7.0.2"

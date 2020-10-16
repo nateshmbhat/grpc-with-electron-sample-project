@@ -27,10 +27,9 @@ module.exports = merge.smart(baseConfig, {
   target: 'electron-renderer',
 
   entry: [
-    'react-hot-loader/patch',
     `webpack-dev-server/client?http://localhost:${port}/`,
     'webpack/hot/only-dev-server',
-    path.join(__dirname, 'app/index.tsx')
+    path.join(__dirname, 'app/index.ts')
   ],
 
   output: {
@@ -168,10 +167,6 @@ module.exports = merge.smart(baseConfig, {
   },
 
   plugins: [
-    new webpack.HotModuleReplacementPlugin({
-      multiStep: true
-    }),
-
     new webpack.NoEmitOnErrorsPlugin(),
 
     /**
@@ -198,7 +193,6 @@ module.exports = merge.smart(baseConfig, {
     }),
   ],
 
-  externals: ['grpc'],
   node: {
     __dirname: false,
     __filename: false

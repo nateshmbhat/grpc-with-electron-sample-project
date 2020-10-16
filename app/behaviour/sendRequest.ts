@@ -250,7 +250,11 @@ export class GRPCRequest extends EventEmitter {
    * @param requestStartTime
    */
   private unaryCall(client: any, inputs: any, md: Metadata, requestStartTime?: Date) {
+    console.log('client :>> ', client);
+    console.log('inputs :>> ', inputs);
     return client[this.protoInfo.methodName](inputs, md, (err: ServiceError, response: any) => {
+      console.log('response :>> ', response );
+      console.log('err:>> ', err);
       this.handleUnaryResponse(err, response, requestStartTime);
     });
   }
