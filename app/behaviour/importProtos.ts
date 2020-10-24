@@ -1,12 +1,14 @@
 import { remote } from 'electron';
-import { fromFileName, mockRequestMethods, Proto, walkServices } from 'bloomrpc-mock';
+import { fromFileName, mockRequestMethods, Proto, walkServices } from 'bloomrpc-mock-js';
 import * as path from "path";
-import { ProtoFile, ProtoService } from './protobuf';
-import { Service } from 'protobufjs';
+import type { ProtoFile, ProtoService } from './protobuf';
+import type { Service } from 'protobufjs';
 
 const commonProtosPath = [
   // @ts-ignore
   path.join(__static),
+  // @ts-ignore
+  path.join(__static  , '/home/nateshmbhat/Desktop/bloomrpc-svelte/static/sample/'),
 ];
 
 export type OnProtoUpload = (protoFiles: ProtoFile[], err?: Error) => void

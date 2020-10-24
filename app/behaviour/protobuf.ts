@@ -1,4 +1,4 @@
-import { Proto, ServiceMethodsPayload } from 'bloomrpc-mock';
+import type { Proto, ServiceMethodsPayload } from 'bloomrpc-mock-js';
 
 export interface ProtoFile {
   proto: Proto,

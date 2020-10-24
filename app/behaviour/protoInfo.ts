@@ -1,6 +1,6 @@
 // @ts-ignore
 import * as lodashGet from 'lodash.get';
-import { ProtoService } from './protobuf';
+import type { ProtoService } from './protobuf';
 
 
 export class ProtoInfo {

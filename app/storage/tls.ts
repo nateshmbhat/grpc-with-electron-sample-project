@@ -1,6 +1,6 @@
 // @ts-ignore
 import * as Store from "electron-store";
-import { Certificate } from "../behaviour";
+import type { Certificate } from "../behaviour";
 
 const TLSStore = new Store({
   name: "tls",

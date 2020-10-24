@@ -44,7 +44,7 @@ module.exports = {
           options: {
             emitCss: true,
             preprocess: require('svelte-preprocess')(),
-            hotReload: true
+            hotReload:false 
           }
         }
       },
@@ -66,7 +66,7 @@ module.exports = {
    * Determine the array of extensions that should be used to resolve modules.
    */
   resolve: {
-    extensions: ['.js', '.json', '.ts', 'svelte'],
+    extensions: ['.mjs','.js', '.json', '.ts', 'svelte'],
     modules: [path.join(__dirname, 'app'), 'node_modules']
   },
 

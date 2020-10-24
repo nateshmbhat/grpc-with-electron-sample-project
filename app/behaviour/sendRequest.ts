@@ -1,9 +1,9 @@
 import { EventEmitter } from "events";
-import { credentials, Metadata, ServiceError } from "grpc";
-import { ProtoInfo } from './protoInfo';
+import type { credentials, Metadata, ServiceError } from "grpc";
+import type { ProtoInfo } from './protoInfo';
 import * as grpc from 'grpc';
 import * as fs from "fs";
-import { Certificate } from "./importCertificates";
+import type { Certificate } from "./importCertificates";
 
 export interface GRPCRequestInfo {
   url: string;

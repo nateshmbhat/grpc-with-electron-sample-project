@@ -1,7 +1,9 @@
 <script lang="ts">
+  import ImportProtoButton from "./components/buttons/ImportProtoButton.svelte";
+  import RequestEditor from "./components/editor/RequestEditor.svelte";
 </script>
 
-<style>
-</style>
-
-<button on:click|preventDefault={getRandomNumber}>{randomNumber}</button>
+<div>
+  <RequestEditor />
+  <ImportProtoButton />
+</div>
