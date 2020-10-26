@@ -1,6 +1,5 @@
 <script lang="ts">
-  import {AceEditor} from "svelte-ace";
-  import * as ace from "brace";
+  import { AceEditor } from "svelte-ace";
   require("brace/mode/json");
   require("brace/theme/clouds_midnight");
 
@@ -13,12 +12,9 @@
 </script>
 
 <input style="width:100%" type="range" bind:value={width} />
-
-<div>
-  <AceEditor
-    value="hello"
-    theme="clouds_midnight"
-    {lang}
-    width="400"
-    height="512" />
-</div>
+<AceEditor
+  value="hello"
+  theme="clouds_midnight"
+  {lang}
+  width="400"
+  height="512" />
