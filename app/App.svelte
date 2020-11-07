@@ -1,9 +1,8 @@
 <script lang="ts">
-  import ImportProtoButton from "./components/buttons/ImportProtoButton.svelte";
-  import RequestEditor from "./components/editor/RequestEditor.svelte";
+  import TapWire from "./components/TapWire.svelte";
+  import { MaterialApp } from "svelte-materialify";
 </script>
 
-<div>
-  <RequestEditor />
-  <ImportProtoButton />
-</div>
+<MaterialApp>
+  <TapWire />
+</MaterialApp>

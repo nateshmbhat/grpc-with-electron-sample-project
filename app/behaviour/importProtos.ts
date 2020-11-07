@@ -18,14 +18,15 @@ export type OnProtoUpload = (protoFiles: ProtoFile[], err?: Error) => void
  * @param onProtoUploaded
  * @param importPaths
  */
-export function importProtos(onProtoUploaded: OnProtoUpload, importPaths?: string[]) {
-
-  // remote.dialog.showOpenDialog({
-  //   properties: ['openFile', 'multiSelections'],
-  //   filters: [
-  //     { name: 'Protos', extensions: ['proto'] },
-  //   ]
-  // }, async (filePaths: string[]) => {
+export async function importProtos(onProtoUploaded: OnProtoUpload, importPaths?: string[]) {
+  const result = await remote.dialog.showOpenDialog( remote.getCurrentWindow(),{
+    properties: ['openFile', 'multiSelections'],
+    filters: [
+      { name: 'Protos', extensions: ['proto'] },
+    ]
+  }); 
+  console.log(result)
+  // async (filePaths: string[]) => {
   //   if (!filePaths) {
   //     return;
   //   }
@@ -100,10 +101,14 @@ function parseServices(proto: Proto) {
 
 export function importResolvePath(): Promise<string> {
   return new Promise((resolve, reject) => {
-    // remote.dialog.showOpenDialog({
-    //   properties: ['openDirectory'],
-    //   filters: []
-    // }, (filePaths: string[]) => {
+    
+    const result = remote.dialog.showOpenDialog( remote.getCurrentWindow(),{
+      properties: ['openDirectory'],
+      filters: []
+    })
+    console.log(result);
+    
+    // (filePaths: string[]) => {
     //   if (!filePaths) {
     //     return reject("No folder selected");
     //   }

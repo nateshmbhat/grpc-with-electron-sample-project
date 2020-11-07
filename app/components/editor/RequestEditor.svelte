@@ -1,20 +1,11 @@
 <script lang="ts">
   import { AceEditor } from "svelte-ace";
   require("brace/mode/json");
-  require("brace/theme/clouds_midnight");
+  require("brace/theme/chrome");
 
   let width = "100";
-  $: widthString = width + "%";
-
-  let editorText = "Hello its me";
-  let lang = "json";
-  let options = {};
+  const lang = "json",
+    theme = "chrome";
 </script>
 
-<input style="width:100%" type="range" bind:value={width} />
-<AceEditor
-  value="hello"
-  theme="clouds_midnight"
-  {lang}
-  width="400"
-  height="512" />
+<AceEditor {theme} {lang} height="512" />
