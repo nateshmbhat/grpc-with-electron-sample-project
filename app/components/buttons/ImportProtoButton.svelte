@@ -13,14 +13,14 @@
     'greeter-service.proto',
   )
 
-  var dispatcher = createEventDispatcher<{ protoFiles: ProtoFile[] }>()
+  var dispatcher = createEventDispatcher<{ onProtoLoaded: ProtoFile[] }>()
 
   //@ts-ignore
   const staticPath = __static
   const importSampleProto = async () => {
     const protoFiles = await loadProtos([SAMPLE_PROT_PATH])
     console.dir(protoFiles)
-    dispatcher('protoFiles', protoFiles)
+    dispatcher('onProtoLoaded', protoFiles)
   }
 </script>
 

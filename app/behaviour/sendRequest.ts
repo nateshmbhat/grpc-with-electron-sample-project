@@ -1,8 +1,8 @@
 import { EventEmitter } from "events";
-import type { credentials, Metadata, ServiceError } from "grpc";
+import { credentials, Metadata, ServiceError } from "@grpc/grpc-js";
 import type { ProtoInfo } from './protoInfo';
-import * as grpc from 'grpc';
 import * as fs from "fs";
+import type {Client as GrpcClient} from '@grpc/grpc-js'
 import type { Certificate } from "./importCertificates";
 
 export interface GRPCRequestInfo {
@@ -47,7 +47,7 @@ export class GRPCRequest extends EventEmitter {
 
   send(): GRPCRequest {
     const serviceClient: any = this.protoInfo.client();
-    const client: grpc.Client = this.getClient(serviceClient);
+    const client: GrpcClient = this.getClient(serviceClient);
     let inputs = {};
     let metadata: {[key: string]: any} = {};
 
@@ -63,7 +63,7 @@ export class GRPCRequest extends EventEmitter {
     const md = new Metadata();
     Object.keys(metadata).forEach(key => {
       if (key.endsWith("-bin")) {
-        let encoding = "utf8";
+        let encoding : BufferEncoding = "utf-8";
         let value = metadata[key];
 
         // can prefix the value with any encoding that the buffer supports
@@ -76,7 +76,7 @@ export class GRPCRequest extends EventEmitter {
           const groups = new RegExp(regexEncoding).exec(value);
 
           if (groups) {
-            encoding = groups[1];
+            encoding = groups[1] as BufferEncoding;
             value = groups[2];
           }
         }
@@ -159,7 +159,7 @@ export class GRPCRequest extends EventEmitter {
    * Get grpc client for this relevant request
    * @param serviceClient
    */
-  private getClient(serviceClient: any): grpc.Client {
+  private getClient(serviceClient: any): GrpcClient {
     let creds = credentials.createInsecure();
     let options = {};
 

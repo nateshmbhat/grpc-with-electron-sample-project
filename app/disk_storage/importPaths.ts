@@ -14,7 +14,7 @@ export function storeImportPaths(paths: string[]) {
   ImportPathsStore.set(KEYS.IMPORT_PATH, paths);
 }
 
-export function getImportPaths(): string[] {
+export function fetchImportPaths(): string[] {
   return ImportPathsStore.get(KEYS.IMPORT_PATH, [""]);
 }
 
