@@ -1,13 +1,13 @@
 import { EventEmitter } from "events";
 import { credentials, Metadata, ServiceError } from "@grpc/grpc-js";
-import type { ProtoInfo } from './protoInfo';
+import type { RpcProtoInfo } from './protoInfo';
 import * as fs from "fs";
 import type {Client as GrpcClient} from '@grpc/grpc-js'
 import type { Certificate } from "./importCertificates";
 
 export interface GRPCRequestInfo {
   url: string;
-  protoInfo: ProtoInfo;
+  rpcProtoInfo: RpcProtoInfo;
   metadata: string;
   inputs: string;
   interactive?: boolean;
@@ -27,17 +27,17 @@ export const GRPCEventType = {
 
 export class GRPCRequest extends EventEmitter {
   url: string;
-  protoInfo: ProtoInfo;
+  rpcProtoInfo: RpcProtoInfo;
   metadata: string;
   inputs: string;
   interactive?: boolean;
   tlsCertificate?: Certificate;
   _call?: any;
 
-  constructor({ url, protoInfo, metadata, inputs, interactive, tlsCertificate }: GRPCRequestInfo) {
+  constructor({ url, rpcProtoInfo: protoInfo, metadata, inputs, interactive, tlsCertificate }: GRPCRequestInfo) {
     super();
     this.url = url;
-    this.protoInfo = protoInfo;
+    this.rpcProtoInfo = protoInfo;
     this.metadata = metadata;
     this.inputs = inputs;
     this.interactive = interactive;
@@ -46,7 +46,7 @@ export class GRPCRequest extends EventEmitter {
   }
 
   send(): GRPCRequest {
-    const serviceClient: any = this.protoInfo.client();
+    const serviceClient: any = this.rpcProtoInfo.client();
     const client: GrpcClient = this.getClient(serviceClient);
     let inputs = {};
     let metadata: {[key: string]: any} = {};
@@ -88,7 +88,7 @@ export class GRPCRequest extends EventEmitter {
     });
 
     // Gather method information
-    const methodDefinition = this.protoInfo.methodDef();
+    const methodDefinition = this.rpcProtoInfo.methodDef();
 
     // TODO: find proper type for call
     let call: any;
@@ -193,7 +193,7 @@ export class GRPCRequest extends EventEmitter {
    * @param requestStartTime
    */
   private clientSideStreaming(client: any, inputs: any, md: Metadata, requestStartTime?: Date) {
-    const call = client[this.protoInfo.methodName](md, (err: ServiceError, response: any) => {
+    const call = client[this.rpcProtoInfo.methodName](md, (err: ServiceError, response: any) => {
       this.handleUnaryResponse(err, response, requestStartTime);
     });
 
@@ -252,7 +252,7 @@ export class GRPCRequest extends EventEmitter {
   private unaryCall(client: any, inputs: any, md: Metadata, requestStartTime?: Date) {
     console.log('client :>> ', client);
     console.log('inputs :>> ', inputs);
-    return client[this.protoInfo.methodName](inputs, md, (err: ServiceError, response: any) => {
+    return client[this.rpcProtoInfo.methodName](inputs, md, (err: ServiceError, response: any) => {
       console.log('response :>> ', response );
       console.log('err:>> ', err);
       this.handleUnaryResponse(err, response, requestStartTime);

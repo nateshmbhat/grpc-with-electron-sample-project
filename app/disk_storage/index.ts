@@ -6,7 +6,7 @@ export * from './importPaths';
 export * from './protos';
 export * from './tls';
 
-export function clearAll() {
+export function clearDiskStore() {
   clearImportPaths();
   clearTLS();
   clearProtoFiles();

@@ -3,7 +3,7 @@ import * as lodashGet from 'lodash.get';
 import type { ProtoService } from './protobuf';
 
 
-export class ProtoInfo {
+export class RpcProtoInfo {
 
   service: ProtoService;
   methodName: string;

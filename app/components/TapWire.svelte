@@ -1,14 +1,14 @@
 <script>
-  import { protosStore } from "../stores/protos";
+  import { appConfigStore, protoFilesStore } from "../stores/index";
 
   import ImportProtoButton from "./buttons/ImportProtoButton.svelte";
   import RequestEditor from "./editor/RequestEditor.svelte";
 
   const onProtoLoaded = (protoFiles) => {
     console.log(protoFiles);
+    protoFilesStore.setProtoFiles(protoFiles);
   };
 </script>
 
 <RequestEditor />
-{$protosStore}
 <ImportProtoButton on:onProtoLoaded={(e) => onProtoLoaded(e.detail)} />
