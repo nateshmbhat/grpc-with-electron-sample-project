@@ -13,8 +13,7 @@ function createStore() {
   return {
     subscribe,
     setConfig : (config:AppConfigModel)=> set(config) , 
-    selectRpc: (rpcInfo: RpcProtoInfo) =>
-      update((config) => ({ ...config, selectedRpc: rpcInfo })),
+    setSelectedRpc: (rpcInfo: RpcProtoInfo) => update((config) => ({ ...config, selectedRpc: rpcInfo })),
   };
 }
 

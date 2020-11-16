@@ -1,5 +1,5 @@
 import { remote } from 'electron';
-import { fromFileName, mockRequestMethods, Proto, walkServices } from 'bloomrpc-mock-js';
+import { fromFileName, mockRequestMethods, mockResponseMethods, Proto, walkServices } from 'bloomrpc-mock-js';
 import * as path from "path";
 import type { ProtoFile, ProtoService } from './protobuf';
 import type { Service } from 'protobufjs';
@@ -83,16 +83,16 @@ export async function loadProtos(filePaths: string[], importPaths?: string[], on
  * @param proto
  */
 function parseServices(proto: Proto) {
-
   const services: {[key: string]: ProtoService} = {};
-
   walkServices(proto, (service: Service, _: any, serviceName: string) => {
-    const mocks = mockRequestMethods(service);
+    const requestMocks = mockRequestMethods(service);
+    const responseMocks = mockResponseMethods(service);
     services[serviceName] = {
       serviceName: serviceName,
       proto,
-      methodsMocks: mocks,
-      methodsName: Object.keys(mocks),
+      requestMocks: requestMocks,
+      responseMocks : responseMocks,
+      methodsName: Object.keys(requestMocks),
     };
   });
 

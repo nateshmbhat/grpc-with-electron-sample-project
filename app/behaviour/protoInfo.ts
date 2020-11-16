@@ -1,20 +1,23 @@
+import type { MethodPayload } from "bloomrpc-mock-js";
 // @ts-ignore
-import * as lodashGet from 'lodash.get';
-import type { ProtoService } from './protobuf';
-
+import * as lodashGet from "lodash.get";
+import type { ProtoService } from "./protobuf";
 
 export class RpcProtoInfo {
-
   service: ProtoService;
   methodName: string;
+  mockRequestPayload: MethodPayload;
+  mockResponsePayload: MethodPayload;
 
   constructor(service: ProtoService, methodName: string) {
     this.service = service;
     this.methodName = methodName;
+    this.mockRequestPayload = this.service.requestMocks[this.methodName]();
+    this.mockResponsePayload = this.service.responseMocks[this.methodName]();
   }
 
   client(): any {
-      return lodashGet(this.service.proto.ast, this.service.serviceName);
+    return lodashGet(this.service.proto.ast, this.service.serviceName);
   }
 
   serviceDef() {

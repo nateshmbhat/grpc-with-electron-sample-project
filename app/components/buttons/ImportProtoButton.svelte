@@ -5,7 +5,6 @@
   import { createEventDispatcher } from 'svelte'
   import type { ProtoFile } from '../../behaviour/protobuf'
   import { Button } from 'svelte-materialify'
-  import { ProtoInfo } from '../../behaviour/protoInfo'
   const SAMPLE_PROT_PATH = path.join(
     //@ts-ignore
     __static,
