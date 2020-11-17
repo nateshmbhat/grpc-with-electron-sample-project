@@ -2,6 +2,7 @@
  * Base webpack config used across other specific configs
  */
 
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const path = require('path');
 const webpack = require('webpack');
 const fs = require('fs');
@@ -37,12 +38,11 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(svelte)$/,
+        test: /\.(html|svelte)$/,
         exclude: /node_modules/,
         use: {
           loader: 'svelte-loader',
           options: {
-            emitCss: true,
             preprocess: require('svelte-preprocess')(),
             hotReload:false 
           }

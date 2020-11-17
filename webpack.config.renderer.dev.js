@@ -184,7 +184,7 @@ module.exports = merge.smart(baseConfig, {
     new webpack.EnvironmentPlugin({
       NODE_ENV: 'development'
     }),
-
+// 
     new webpack.LoaderOptionsPlugin({
       debug: true
     }),

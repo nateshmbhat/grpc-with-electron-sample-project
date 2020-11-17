@@ -92,7 +92,7 @@ module.exports = class MenuBuilder {
           label: 'Clear Storage',
           accelerator: 'Ctrl+Command+D',
           click() {
-            require('./storage').clearAll();
+            require('./disk_storage').clearDiskStore();
           }
         }
       ]

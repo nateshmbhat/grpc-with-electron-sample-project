@@ -44,3 +44,5 @@ main.js
 main.js.map
 
 .idea
+app/main.prod.js
+app/main.prod.js.map
