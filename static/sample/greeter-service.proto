@@ -11,12 +11,22 @@ service Greeter {
     // Sends a greeting
     rpc SayHello (HelloRequest) returns (HelloReply) {}
     // Sends another greeting
-    rpc SayHelloAgain (HelloRequest) returns (HelloReply) {}
+    rpc SayHelloAgain (HelloAgainRequest) returns (HelloAgainResponse) {}
   }
   
   // The request message containing the user's name.
   message HelloRequest {
     string name = 1;
+  }
+
+ message HelloAgainRequest {
+    string myMessage = 1;
+    string yourMessage= 2;
+  }
+
+ message HelloAgainResponse{
+    string responseMessage1= 1;
+    int32 secondResponseMessage= 2;
   }
   
   // The response message containing the greetings
