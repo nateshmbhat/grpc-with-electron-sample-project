@@ -13,6 +13,14 @@ service Greeter {
     // Sends another greeting
     rpc SayHelloAgain (HelloAgainRequest) returns (HelloAgainResponse) {}
   }
+
+service PathMaker {
+    // Sends a greeting
+    rpc TellHello (HelloRequest) returns (HelloReply) {}
+    // Sends another greeting
+    rpc TellHi (HelloAgainRequest) returns (HelloAgainResponse) {}
+  }
+ 
   
   // The request message containing the user's name.
   message HelloRequest {

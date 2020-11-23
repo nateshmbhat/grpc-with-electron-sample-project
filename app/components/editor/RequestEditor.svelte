@@ -8,7 +8,7 @@
   const lang = "json", theme = "chrome";
 
   $: selectedRpc = $appConfigStore.selectedRpc;
-  $: requestMessage = JSON.stringify(selectedRpc?.mockRequestPayload.plain ?? {} , null , 2)
+  $: requestMessage = JSON.stringify(selectedRpc?.mockRequestPayload.plain ?? { } , null , 2)
   $:{
     console.log('request message : ' , requestMessage)
   }

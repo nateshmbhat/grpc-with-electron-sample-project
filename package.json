@@ -212,7 +212,7 @@
     "protobufjs": "^6.8.8",
     "re-resizable": "^4.11.0",
     "source-map-support": "^0.5.10",
-    "svelte-ace": "../svelte-ace",
+    "svelte-ace": "^1.0.13",
     "terser-webpack-plugin": "^1.2.3",
     "uuid": "^7.0.2"
   },

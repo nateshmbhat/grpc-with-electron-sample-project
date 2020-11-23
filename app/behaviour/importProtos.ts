@@ -3,6 +3,7 @@ import { fromFileName, mockRequestMethods, mockResponseMethods, Proto, walkServi
 import * as path from "path";
 import type { ProtoFile, ProtoService } from './protobuf';
 import type { Service } from 'protobufjs';
+import type { ServiceDefinition } from '@grpc/grpc-js';
 
 const commonProtosPath = [
   // @ts-ignore
@@ -84,15 +85,18 @@ export async function loadProtos(filePaths: string[], importPaths?: string[], on
  */
 function parseServices(proto: Proto) {
   const services: {[key: string]: ProtoService} = {};
-  walkServices(proto, (service: Service, _: any, serviceName: string) => {
+  walkServices(proto, (service: Service, serviceClientImpl: any, serviceName: string) => {
     const requestMocks = mockRequestMethods(service);
     const responseMocks = mockResponseMethods(service);
+    const serviceDefinition = serviceClientImpl.service 
+    console.log('Service definition : ' , serviceDefinition) 
     services[serviceName] = {
       serviceName: serviceName,
       proto,
+      serviceDefinition : serviceDefinition,
       requestMocks: requestMocks,
       responseMocks : responseMocks,
-      methodsName: Object.keys(requestMocks),
+      methodNames: Object.keys(requestMocks),
     };
   });
 

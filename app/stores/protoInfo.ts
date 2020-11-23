@@ -9,7 +9,7 @@ export const rpcProtoInfosStore = derived(protoFilesStore , ($protoFilesStore)=>
 
     protoFiles.forEach(protoFile=>{
         Object.entries(protoFile.services).forEach(([serviceName , service])=>{
-           service.methodsName.forEach(method=>protoInfos.push(new RpcProtoInfo(service,method)))
+           service.methodNames.forEach(method=>protoInfos.push(new RpcProtoInfo(service,method)))
         })
     })
     return protoInfos
