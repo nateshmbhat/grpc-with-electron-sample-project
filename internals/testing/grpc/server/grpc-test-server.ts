@@ -1,38 +1,43 @@
-import type { PackageDefinition } from "@grpc/grpc-js/build/src/make-client";
+import * as grpc from '@grpc/grpc-js'
+import type { PackageDefinition } from '@grpc/grpc-js/build/src/make-client';
 
-var PROTO_PATH = __dirname + '/../protos/greeter-service.proto';
+var PROTO_PATH = __dirname + '/../static/sample/greeter-service.proto';
 
-var grpc = require('grpc');
 var protoLoader = require('@grpc/proto-loader');
-var packageDefinition : PackageDefinition = protoLoader.loadSync(
-    PROTO_PATH,
-    {keepCase: true,
-     longs: String,
-     enums: String,
-     defaults: true,
-     oneofs: true
-    });
-var hello_proto = grpc.loadPackageDefinition(packageDefinition);
-console.log(hello_proto)
+var packageDefinition: PackageDefinition = protoLoader.loadSync(
+  PROTO_PATH,
+  {
+    keepCase: true,
+    longs: String,
+    enums: String,
+    defaults: true,
+    oneofs: true
+  });
+var hello_world_package = grpc.loadPackageDefinition(packageDefinition);
 
 /**
  * Implements the SayHello RPC method.
  */
-function sayHello(call, callback) {
-  callback(null, {message: 'Hello ' + call.request.name});
+function sayHello(call: any, callback: any) {
+  console.log('Request : ' , call)
+  callback(null, { message: 'Hello ' + call.request.name });
 }
 
 /**
  * Starts an RPC server that receives requests for the Greeter service at the
  * sample server port
  */
-function main() {
+export function startDummyGrpcTargetServer({ port}: { port: number }) {
   var server = new grpc.Server();
-  server.addService(hello_proto.Greeter.service, {sayHello: sayHello});
-  server.bind('0.0.0.0:50051', grpc.ServerCredentials.createInsecure());
-  server.start();
+  //@ts-ignore
+  server.addService(hello_world_package.hello_world.Greeter['service'], { sayHello: sayHello });
+  server.bindAsync(`localhost:${port}`, grpc.ServerCredentials.createInsecure(), (error, port) => {
+    if (error) {
+      console.error(error , port)
+    }
+    else {
+      console.log('Dummy Grpc Test Server started at port : ' , port)
+      server.start();
+    }
+  });
 }
-
-main();
-
-export {}

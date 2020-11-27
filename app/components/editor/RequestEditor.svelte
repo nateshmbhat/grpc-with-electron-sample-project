@@ -1,17 +1,13 @@
 <script lang="ts">
-  import { AceEditor } from "svelte-ace";
-  import type { RpcProtoInfo } from "../../behaviour";
-  import { appConfigStore } from "../../stores";
-  require("brace/mode/json");
-  require("brace/theme/chrome");
-  export let width = "100%";
-  const lang = "json", theme = "chrome";
+  import { AceEditor } from 'svelte-ace'
+  import { requestResponseEditorStore } from '../../stores/appConfigStore'
+  require('brace/mode/json')
+  require('brace/theme/chrome')
+  export let width = '100%'
+  const lang = 'json',
+    theme = 'chrome'
 
-  $: selectedRpc = $appConfigStore.selectedRpc;
-  $: requestMessage = JSON.stringify(selectedRpc?.mockRequestPayload.plain ?? { } , null , 2)
-  $:{
-    console.log('request message : ' , requestMessage)
-  }
+  $: requestMessage = $requestResponseEditorStore.requestText
 </script>
 
 <AceEditor

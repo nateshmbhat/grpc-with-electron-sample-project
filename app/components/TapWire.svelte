@@ -1,23 +1,30 @@
 <script lang="ts">
-import type { ProtoFile } from "../behaviour";
+  import { onMount } from 'svelte'
 
-  import { appConfigStore, protoFilesStore } from "../stores/index";
+  import type { ProtoFile } from '../behaviour'
+  import { startDummyGrpcTargetServer } from '../../internals/testing/grpc/server/grpc-test-server'
 
-  import ImportProtoButton from "./buttons/ImportProtoButton.svelte";
-  import RequestEditor from "./editor/RequestEditor.svelte";
-  import ResponseEditor from "./editor/ResponseEditor.svelte";
-  import RpcSelector from "./testing/RpcSelector.svelte";
-import ServiceSelector from "./testing/ServiceSelector.svelte";
+  import { appConfigStore, protoFilesStore } from '../stores/index'
 
-  const onProtoLoaded = (protoFiles:ProtoFile[]) => {
-    console.log(protoFiles);
-    protoFilesStore.setProtoFiles(protoFiles);
-  };
+  import ImportProtoButton from './buttons/ImportProtoButton.svelte'
+  import RequestEditor from './editor/RequestEditor.svelte'
+  import ResponseEditor from './editor/ResponseEditor.svelte'
+  import RpcSelector from './testing/RpcSelector.svelte'
+  import ServiceSelector from './testing/ServiceSelector.svelte'
+  import TargetServerField from './testing/TargetServerField.svelte'
+
+  const onProtoLoaded = (protoFiles: ProtoFile[]) => {
+    console.log(protoFiles)
+    protoFilesStore.setProtoFiles(protoFiles)
+  }
+  onMount(() => {
+    startDummyGrpcTargetServer({ port: 50053 })
+  })
 </script>
 
 <style>
   div.request-response-holder {
-      display: flex;
+    display: flex;
   }
 </style>
 
@@ -26,6 +33,7 @@ import ServiceSelector from "./testing/ServiceSelector.svelte";
   <ResponseEditor width="50%" />
 </div>
 
+<TargetServerField />
 <ImportProtoButton on:onProtoLoaded={(e) => onProtoLoaded(e.detail)} />
 <RpcSelector />
-<ServiceSelector/>
+<ServiceSelector />

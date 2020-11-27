@@ -1,23 +1,53 @@
+import type { Server, ServiceDefinition } from "@grpc/grpc-js";
 import { writable } from "svelte/store";
 import type { RpcProtoInfo } from "../behaviour";
 
 export interface AppConfigModel {
   selectedRpc: RpcProtoInfo | null;
-  grpcServerUrl : string;
+  mockGrpcServerUrl: string;
+  targetGrpcServerUrl: string;
+  mockGrpcServer: Server | null;
 }
 
-function createStore() {
+export interface RequestResponseEditorModel {
+  requestText: string;
+  responseText: string;
+}
+
+function createAppConfigStore() {
   const { set, subscribe, update } = writable<AppConfigModel>({
     selectedRpc: null,
-    grpcServerUrl :'localhost:80'
+    mockGrpcServerUrl: 'localhost:50051',
+    targetGrpcServerUrl: 'localhost:50053',
+    mockGrpcServer: null,
   });
 
   return {
     subscribe,
-    setConfig : (config:AppConfigModel)=> set(config) , 
+    setConfig: (config: AppConfigModel) => set(config),
     setSelectedRpc: (rpcInfo: RpcProtoInfo) => update((config) => ({ ...config, selectedRpc: rpcInfo })),
-    setGrpcServerUrl : (url :string) => update((config)=>({...config , grpcServerUrl:url}))
+    setMockGrpcServerUrl: (url: string) => update((config) => ({ ...config, mockGrpcServerUrl: url })),
+    setMockGrpcServer: (server: Server) => update((config) => {
+      return ({ ...config, mockGrpcServer: server });
+    }),
+
+    setTargetGrpcServerUrl: (url: string) => update((config) => ({ ...config, targetGrpcServerUrl: url })),
   };
 }
 
-export const appConfigStore = createStore();
+function createRequestResponseEditorStore() {
+  const { set, subscribe, update } = writable<RequestResponseEditorModel>({
+    requestText: JSON.stringify({}),
+    responseText: JSON.stringify({}),
+  })
+  return {
+    subscribe,
+    setRequest: (data: string) => update((store) => ({ ...store, requestText: data })),
+    setResponse: (data: string) => update((store) => ({ ...store, responseText: data })),
+    setValue: (data: RequestResponseEditorModel) => set(data)
+  }
+}
+
+
+export const appConfigStore = createAppConfigStore();
+export const requestResponseEditorStore = createRequestResponseEditorStore();

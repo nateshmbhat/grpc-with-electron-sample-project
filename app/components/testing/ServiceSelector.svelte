@@ -3,11 +3,13 @@
   import ImportProtoButton from '../buttons/ImportProtoButton.svelte'
   import { Button } from 'svelte-materialify'
   import { servicesStore } from '../../stores/protoInfo'
-  import {startGrpcServer} from '../../behaviour/grpcServer'
+  import { startMockGrpcServer } from '../../behaviour/grpcServer'
+  import { appConfigStore } from '../../stores'
 
   function onServiceSelected(service: ProtoService) {
-    startGrpcServer(service.serviceDefinition)
+    startMockGrpcServer($appConfigStore, [service.serviceDefinition])
   }
+
 </script>
 
 <h5>Service List</h5>
