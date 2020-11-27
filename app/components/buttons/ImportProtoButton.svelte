@@ -1,9 +1,9 @@
 <script lang="ts">
   import { pathToFileURL } from 'url'
-  import { loadProtos } from '../../behaviour/importProtos'
+  import { loadProtos } from '../../behaviour'
   import path from 'path'
   import { createEventDispatcher } from 'svelte'
-  import type { ProtoFile } from '../../behaviour/protobuf'
+  import type { ProtoFile } from '../../behaviour'
   import { Button } from 'svelte-materialify'
   import { loadPackageDefinition, credentials } from '@grpc/grpc-js'
 import type { PackageDefinition } from '@grpc/grpc-js/build/src/make-client';

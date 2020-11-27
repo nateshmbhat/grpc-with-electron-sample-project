@@ -1,6 +1,6 @@
 import * as grpc from '@grpc/grpc-js'
 import type { ServiceDefinition } from '@grpc/grpc-js'
-import type { RpcProtoInfo } from './protoInfo'
+import type { RpcProtoInfo } from './models/protoInfo'
 import type { AppConfigModel } from '../stores/appConfigStore';
 
 function addGrpcServices(server: grpc.Server | null, serviceDefinitions: ServiceDefinition[]): void {

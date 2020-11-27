@@ -1,7 +1,7 @@
 import { remote } from 'electron';
 import { fromFileName, mockRequestMethods, mockResponseMethods, Proto, walkServices } from 'bloomrpc-mock-js';
 import * as path from "path";
-import type { ProtoFile, ProtoService } from './protobuf';
+import type { ProtoFile, ProtoService } from './models/protobuf';
 import type { Service } from 'protobufjs';
 import type { ServiceDefinition } from '@grpc/grpc-js';
 

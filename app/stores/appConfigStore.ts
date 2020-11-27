@@ -1,6 +1,6 @@
 import type { Server, ServiceDefinition } from "@grpc/grpc-js";
 import { writable } from "svelte/store";
-import type { RpcProtoInfo } from "../behaviour";
+import type { RpcProtoInfo } from "../behaviour/models";
 
 export interface AppConfigModel {
   selectedRpc: RpcProtoInfo | null;

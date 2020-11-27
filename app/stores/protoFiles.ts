@@ -1,5 +1,5 @@
 import { writable } from "svelte/store";
-import type { ProtoFile, RpcProtoInfo } from "../behaviour";
+import type { ProtoFile, RpcProtoInfo } from "../behaviour/models";
 import { fetchProtoFiles } from "../disk_storage";
 
 function createStore() {

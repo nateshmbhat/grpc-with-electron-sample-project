@@ -1,9 +1,9 @@
 import { EventEmitter } from "events";
 import { credentials, Metadata, ServiceError } from "@grpc/grpc-js";
-import type { RpcProtoInfo } from './protoInfo';
+import type { RpcProtoInfo } from './models';
 import * as fs from "fs";
 import type {Client as GrpcClient} from '@grpc/grpc-js'
-import type { Certificate } from "./importCertificates";
+import type { Certificate } from "./certificateImporter";
 
 export interface GRPCRequestInfo {
   url: string;
