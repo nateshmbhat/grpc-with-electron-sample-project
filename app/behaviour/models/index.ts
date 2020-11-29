@@ -1,2 +1,2 @@
 export * from './protoInfo'
-export * from './protobuf'
+export * from './models'

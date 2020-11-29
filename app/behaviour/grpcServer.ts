@@ -2,6 +2,7 @@ import * as grpc from '@grpc/grpc-js'
 import { AppConfigModel, appConfigStore } from '../stores';
 import { requestInterceptor } from './requestInterceptor';
 import type { ProtoService } from './models';
+import { responseInterceptor } from './responseInterceptor';
 
 function addGrpcServices(server: grpc.Server | null, serviceProtos: ProtoService[]): void {
   if (server == null) {
@@ -16,12 +17,16 @@ function addGrpcServices(server: grpc.Server | null, serviceProtos: ProtoService
         requestInterceptor({
           call: clientCall.call, requestMessage: clientCall.request, metadata: clientCall.metadata,
           rpcProtoInfo: methodRpcInfo
-        }).then(responseInfo => {
-          console.log('responseInfo : ', responseInfo)
-          callback(null, responseInfo.data)
-        }).catch(e => {
-          callback(e, null)
-        });
+        })
+          .then(responseInfo =>
+            responseInterceptor({ responseMessage: responseInfo })
+          )
+          .then(responseInfo => {
+            callback(null, responseInfo.data)
+          })
+          .catch(e => {
+            callback(e, null)
+          });
       };
     })
     console.log('service proto-implmentation : ', serviceImplementation)

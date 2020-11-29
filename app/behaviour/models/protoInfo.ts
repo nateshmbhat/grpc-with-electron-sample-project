@@ -1,7 +1,7 @@
 import type { MethodPayload } from "bloomrpc-mock-js";
 // @ts-ignore
 import * as lodashGet from "lodash.get";
-import type { ProtoService } from "./protobuf";
+import type { ProtoService } from "./models";
 
 export class RpcProtoInfo {
   service: ProtoService;

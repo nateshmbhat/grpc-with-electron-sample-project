@@ -1,7 +1,7 @@
 import type { Metadata } from '@grpc/grpc-js'
 import type { Http2CallStream } from '@grpc/grpc-js/build/src/call-stream';
 import { appConfigStore } from '../stores/appConfigStore';
-import type { RpcProtoInfo } from './models';
+import type { RpcProtoInfo, ResponseInfo } from './models';
 import { GRPCEventType, GRPCRequest, ResponseMetaInformation } from './sendRequest';
 
 interface RequestInterceptorCallback {
@@ -11,11 +11,6 @@ interface RequestInterceptorCallback {
     rpcProtoInfo: RpcProtoInfo,
 }
 
-interface ResponseInfo {
-    isStreaming: boolean;
-    data: Object;
-    metaInfo: ResponseMetaInformation;
-}
 
 export function requestInterceptor({ call, metadata, requestMessage, rpcProtoInfo }: RequestInterceptorCallback): Promise<ResponseInfo> {
     const responsePromise = new Promise<ResponseInfo>((resolve, reject) => {
