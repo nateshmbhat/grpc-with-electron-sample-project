@@ -1,5 +1,6 @@
 import type { ServiceDefinition } from '@grpc/grpc-js';
 import type { Proto, ServiceMethodsPayload } from 'bloomrpc-mock-js';
+import type { RpcProtoInfo } from '.';
 
 export interface ProtoFile {
   proto: Proto,
@@ -14,8 +15,8 @@ export interface ProtoServiceList {
 export interface ProtoService {
   proto: Proto,
   serviceName: string,
-  serviceDefinition : ServiceDefinition ,
+  serviceDefinition: ServiceDefinition,
   requestMocks: ServiceMethodsPayload,
   responseMocks: ServiceMethodsPayload,
-  methodNames: string[],
+  methods: { [key: string]: RpcProtoInfo }
 }

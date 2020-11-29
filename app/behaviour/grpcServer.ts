@@ -1,38 +1,48 @@
 import * as grpc from '@grpc/grpc-js'
-import type { ServiceDefinition } from '@grpc/grpc-js'
-import type { RpcProtoInfo } from './models/protoInfo'
-import type { AppConfigModel } from '../stores/appConfigStore';
+import { AppConfigModel, appConfigStore } from '../stores';
+import { requestInterceptor } from './requestInterceptor';
+import type { ProtoService } from './models';
 
-function addGrpcServices(server: grpc.Server | null, serviceDefinitions: ServiceDefinition[]): void {
+function addGrpcServices(server: grpc.Server | null, serviceProtos: ProtoService[]): void {
   if (server == null) {
     console.warn('Tried to add service when the server is not yet ready !')
     return;
   }
-
-  serviceDefinitions.forEach(serviceDefinition => {
+  console.log('service protos : ', serviceProtos)
+  serviceProtos.forEach(serviceProto => {
     const serviceImplementation: grpc.UntypedServiceImplementation = {}
-    Object.keys(serviceDefinition).map((serviceName: string) =>
-      serviceImplementation[serviceName] = (request: any) => { console.log('got request : ', request) })
-    server.addService(serviceDefinition, serviceImplementation);
+    Object.entries(serviceProto.methods).forEach(([methodName, methodRpcInfo]) => {
+      serviceImplementation[methodName] = (clientCall: any, callback: grpc.sendUnaryData<any>) => {
+        requestInterceptor({
+          call: clientCall.call, requestMessage: clientCall.request, metadata: clientCall.metadata,
+          rpcProtoInfo: methodRpcInfo
+        }).then(responseInfo => {
+          console.log('responseInfo : ', responseInfo)
+          callback(null, responseInfo.data)
+        }).catch(e => {
+          callback(e, null)
+        });
+      };
+    })
+    console.log('service proto-implmentation : ', serviceImplementation)
+    server.addService(serviceProto.serviceDefinition, serviceImplementation);
   })
 }
 
-export const startMockGrpcServer = (appConfig: AppConfigModel, serviceDefinitions: ServiceDefinition[]): Promise<grpc.Server> => {
+export const startMockGrpcServer = (serviceProtos: ProtoService[]): void => {
   const grpcServer = new grpc.Server();
-  
-  addGrpcServices(grpcServer, serviceDefinitions)
-  const serverPromise = new Promise<grpc.Server>((resolve, reject) => {
-    grpcServer.bindAsync(appConfig.mockGrpcServerUrl, grpc.ServerCredentials.createInsecure(), (error, port) => {
+
+  addGrpcServices(grpcServer, serviceProtos)
+  appConfigStore.subscribe(config => {
+    grpcServer.bindAsync(config.mockGrpcServerUrl, grpc.ServerCredentials.createInsecure(), (error, port) => {
       if (error) {
         console.error(error)
-        reject(error)
       }
       else {
         console.log("Started server at port : ", port)
         grpcServer.start();
-        resolve(grpcServer)
+        appConfigStore.setMockGrpcServer(grpcServer)
       }
     });
-  });
-  return serverPromise;
+  })();
 }

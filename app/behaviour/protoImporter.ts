@@ -4,12 +4,13 @@ import * as path from "path";
 import type { ProtoFile, ProtoService } from './models/protobuf';
 import type { Service } from 'protobufjs';
 import type { ServiceDefinition } from '@grpc/grpc-js';
+import { RpcProtoInfo } from './models';
 
 const commonProtosPath = [
   // @ts-ignore
   path.join(__static),
   // @ts-ignore
-  path.join(__static  , '/home/nateshmbhat/Desktop/bloomrpc-svelte/static/sample/'),
+  path.join(__static, '/home/nateshmbhat/Desktop/bloomrpc-svelte/static/sample/'),
 ];
 
 export type OnProtoUpload = (protoFiles: ProtoFile[], err?: Error) => void
@@ -20,12 +21,12 @@ export type OnProtoUpload = (protoFiles: ProtoFile[], err?: Error) => void
  * @param importPaths
  */
 export async function importProtos(onProtoUploaded: OnProtoUpload, importPaths?: string[]) {
-  const result = await remote.dialog.showOpenDialog( remote.getCurrentWindow(),{
+  const result = await remote.dialog.showOpenDialog(remote.getCurrentWindow(), {
     properties: ['openFile', 'multiSelections'],
     filters: [
       { name: 'Protos', extensions: ['proto'] },
     ]
-  }); 
+  });
   console.log(result)
   // async (filePaths: string[]) => {
   //   if (!filePaths) {
@@ -84,20 +85,28 @@ export async function loadProtos(filePaths: string[], importPaths?: string[], on
  * @param proto
  */
 function parseServices(proto: Proto) {
-  const services: {[key: string]: ProtoService} = {};
+  const services: { [key: string]: ProtoService } = {};
   walkServices(proto, (service: Service, serviceClientImpl: any, serviceName: string) => {
     const requestMocks = mockRequestMethods(service);
     const responseMocks = mockResponseMethods(service);
-    const serviceDefinition = serviceClientImpl.service 
-    console.log('Service definition : ' , serviceDefinition) 
-    services[serviceName] = {
+    const serviceDefinition = serviceClientImpl.service
+    console.log('Service definition : ', serviceDefinition)
+
+    const serviceObject: ProtoService = {
       serviceName: serviceName,
       proto,
-      serviceDefinition : serviceDefinition,
+      serviceDefinition: serviceDefinition,
       requestMocks: requestMocks,
-      responseMocks : responseMocks,
-      methodNames: Object.keys(requestMocks),
+      responseMocks: responseMocks,
+      methods: {}
     };
+
+    const serviceMethods: { [key: string]: RpcProtoInfo } = {}
+    Object.keys(requestMocks)
+      .forEach(methodName => serviceMethods[methodName] = new RpcProtoInfo(serviceObject, methodName))
+    serviceObject.methods = serviceMethods
+    console.log('service object : ', serviceObject)
+    services[serviceName] = serviceObject
   });
 
   return services;
@@ -105,13 +114,13 @@ function parseServices(proto: Proto) {
 
 export function importResolvePath(): Promise<string> {
   return new Promise((resolve, reject) => {
-    
-    const result = remote.dialog.showOpenDialog( remote.getCurrentWindow(),{
+
+    const result = remote.dialog.showOpenDialog(remote.getCurrentWindow(), {
       properties: ['openDirectory'],
       filters: []
     })
     console.log(result);
-    
+
     // (filePaths: string[]) => {
     //   if (!filePaths) {
     //     return reject("No folder selected");

@@ -1,26 +1,26 @@
 import { derived, writable } from "svelte/store";
-import { ProtoFile, ProtoService, RpcProtoInfo} from "../behaviour";
+import type { ProtoFile, ProtoService, RpcProtoInfo } from "../behaviour";
 import { fetchProtoFiles } from "../disk_storage";
 import { protoFilesStore } from "./protoFiles";
 
-export const rpcProtoInfosStore = derived(protoFilesStore , ($protoFilesStore)=>{
+export const rpcProtoInfosStore = derived(protoFilesStore, ($protoFilesStore) => {
     const protoFiles = $protoFilesStore
-    const protoInfos : RpcProtoInfo[] = []
+    const protoInfos: RpcProtoInfo[] = []
 
-    protoFiles.forEach(protoFile=>{
-        Object.entries(protoFile.services).forEach(([serviceName , service])=>{
-           service.methodNames.forEach(method=>protoInfos.push(new RpcProtoInfo(service,method)))
+    protoFiles.forEach(protoFile => {
+        Object.entries(protoFile.services).forEach(([serviceName, service]) => {
+            Object.values(service.methods).forEach(methodRpcInfo => protoInfos.push(methodRpcInfo))
         })
     })
     return protoInfos
 })
 
-export const servicesStore = derived(protoFilesStore , ($protoFilesStore)=>{
+export const servicesStore = derived(protoFilesStore, ($protoFilesStore) => {
     const protoFiles = $protoFilesStore
-    const services : ProtoService[] = []
+    const services: ProtoService[] = []
 
-    protoFiles.forEach(protoFile=>{
-        Object.entries(protoFile.services).forEach(([serviceName , service])=>{
+    protoFiles.forEach(protoFile => {
+        Object.entries(protoFile.services).forEach(([serviceName, service]) => {
             services.push(service)
         })
     })

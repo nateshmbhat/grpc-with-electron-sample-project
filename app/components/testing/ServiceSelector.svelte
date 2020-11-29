@@ -1,13 +1,12 @@
 <script lang="ts">
-  import type { ProtoFile, ProtoService } from '../../behaviour/protobuf'
+  import type { ProtoFile, ProtoService } from '../../behaviour'
   import ImportProtoButton from '../buttons/ImportProtoButton.svelte'
   import { Button } from 'svelte-materialify'
   import { servicesStore } from '../../stores/protoInfo'
   import { startMockGrpcServer } from '../../behaviour/grpcServer'
-  import { appConfigStore } from '../../stores'
 
   function onServiceSelected(service: ProtoService) {
-    startMockGrpcServer($appConfigStore, [service.serviceDefinition])
+    startMockGrpcServer([service])
   }
 
 </script>
