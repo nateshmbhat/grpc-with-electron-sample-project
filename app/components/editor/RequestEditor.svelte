@@ -8,10 +8,12 @@
     theme = 'chrome'
 
   $: requestMessage = $requestResponseEditorStore.requestText
+  const onEditorTextChanged = (msg: string) =>
+    requestResponseEditorStore.setRequest(msg)
 </script>
 
 <AceEditor
-  on:input={(e) => (requestMessage = e.detail)}
+  on:input={(e) => onEditorTextChanged(e.detail)}
   value={requestMessage}
   {theme}
   {width}

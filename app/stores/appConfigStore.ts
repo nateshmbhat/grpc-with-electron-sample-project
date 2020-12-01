@@ -1,12 +1,28 @@
-import type { Server, ServiceDefinition } from "@grpc/grpc-js";
+import type { Server } from "@grpc/grpc-js";
 import { writable } from "svelte/store";
 import type { RpcProtoInfo } from "../behaviour/models";
+
+export enum LiveEditState {
+  disabled = 'disabled',
+  enabled = 'enabled',
+  editingInProgress = 'editingInProgress',
+  sendInitiated = 'sendInitiated',
+  sendingInProgress = 'sendInProgress'
+}
 
 export interface AppConfigModel {
   selectedRpc: RpcProtoInfo | null;
   mockGrpcServerUrl: string;
   targetGrpcServerUrl: string;
   mockGrpcServer: Server | null;
+  networkTapMode: NetworkTapMode;
+  requestLiveEditState: LiveEditState;
+  responseLiveEditState: LiveEditState;
+}
+
+export enum NetworkTapMode {
+  passThrough = 'passThrough',
+  liveEdit = 'liveEdit',
 }
 
 export interface RequestResponseEditorModel {
@@ -20,6 +36,9 @@ function createAppConfigStore() {
     mockGrpcServerUrl: 'localhost:50051',
     targetGrpcServerUrl: 'localhost:50053',
     mockGrpcServer: null,
+    networkTapMode: NetworkTapMode.passThrough,
+    requestLiveEditState: LiveEditState.disabled,
+    responseLiveEditState: LiveEditState.disabled
   });
 
   return {
@@ -30,8 +49,10 @@ function createAppConfigStore() {
     setMockGrpcServer: (server: Server) => update((config) => {
       return ({ ...config, mockGrpcServer: server });
     }),
-
     setTargetGrpcServerUrl: (url: string) => update((config) => ({ ...config, targetGrpcServerUrl: url })),
+    setNetworkTapMode: (mode: NetworkTapMode) => update(config => ({ ...config, networkTapMode: mode })),
+    setRequestLiveEditState: (liveEditState: LiveEditState) => update(config => ({ ...config, requestLiveEditState: liveEditState })),
+    setResponseLiveEditState: (liveEditState: LiveEditState) => update(config => ({ ...config, responseLiveEditState: liveEditState }))
   };
 }
 

@@ -12,6 +12,7 @@
   import RpcSelector from './testing/RpcSelector.svelte'
   import ServiceSelector from './testing/ServiceSelector.svelte'
   import TargetServerField from './testing/TargetServerField.svelte'
+import SetNetworkTapMode from './testing/SetNetworkTapMode.svelte';
 
   const onProtoLoaded = (protoFiles: ProtoFile[]) => {
     console.log(protoFiles)
@@ -34,6 +35,7 @@
 </div>
 
 <TargetServerField />
+<SetNetworkTapMode/>
 <ImportProtoButton on:onProtoLoaded={(e) => onProtoLoaded(e.detail)} />
 <RpcSelector />
 <ServiceSelector />

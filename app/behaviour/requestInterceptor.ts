@@ -1,6 +1,6 @@
 import type { Metadata } from '@grpc/grpc-js'
 import type { Http2CallStream } from '@grpc/grpc-js/build/src/call-stream';
-import { appConfigStore } from '../stores/appConfigStore';
+import { appConfigStore, LiveEditState, NetworkTapMode, RequestResponseEditorModel, requestResponseEditorStore } from '../stores/appConfigStore';
 import type { RpcProtoInfo, ResponseInfo } from './models';
 import { GRPCEventType, GRPCRequest, ResponseMetaInformation } from './sendRequest';
 
@@ -14,15 +14,19 @@ interface RequestInterceptorCallback {
 
 export function requestInterceptor({ call, metadata, requestMessage, rpcProtoInfo }: RequestInterceptorCallback): Promise<ResponseInfo> {
     const responsePromise = new Promise<ResponseInfo>((resolve, reject) => {
-        appConfigStore.subscribe(config => {
+        appConfigStore.subscribe(async config => {
             console.log('metadata : ', metadata)
             console.log('request message : ', requestMessage)
             console.log('call : ', call)
             console.log('rpc protoInfo : ', rpcProtoInfo)
 
+            requestResponseEditorStore.setRequest(JSON.stringify(requestMessage, null, 2))
+            const transformedRequest = await requestTransformer({ metadata, requestMessage, networkTapMode: config.networkTapMode })
+            console.log('transformedRequest : ', transformedRequest)
+
             const grpcRequest = new GRPCRequest({
-                inputs: JSON.stringify(requestMessage),
-                metadata: JSON.stringify(metadata.getMap()),
+                inputs: JSON.stringify(transformedRequest.requestMessage),
+                metadata: JSON.stringify(transformedRequest.metadata.getMap()),
                 url: config.targetGrpcServerUrl,
                 rpcProtoInfo: rpcProtoInfo
             })
@@ -54,4 +58,35 @@ export function requestInterceptor({ call, metadata, requestMessage, rpcProtoInf
         })();
     });
     return responsePromise;
+}
+
+
+interface RequestTransformerInput { requestMessage: Object, metadata: Metadata, networkTapMode: NetworkTapMode }
+interface RequestTransformerOutput { requestMessage: Object, metadata: Metadata }
+
+async function requestTransformer(request: RequestTransformerInput): Promise<RequestTransformerOutput> {
+    let storeUnSubscriber: Function = () => { };
+    const transformedRequest = await new Promise<RequestTransformerOutput>((resolve, reject) => {
+        if (request.networkTapMode == NetworkTapMode.passThrough) {
+            resolve(request)
+        }
+        else if (request.networkTapMode == NetworkTapMode.liveEdit) {
+            storeUnSubscriber = appConfigStore.subscribe(async config => {
+                console.table(config)
+                switch (config.requestLiveEditState) {
+                    case "sendInitiated":
+                        const newRequestString = await new Promise<string>((res, rej) => requestResponseEditorStore.subscribe(state => res(state.requestText))());
+                        const newRequestObject = JSON.parse(newRequestString)
+                        resolve({ metadata: request.metadata, requestMessage: newRequestObject });
+                        break;
+                    default:
+                        break;
+                }
+            })
+        }
+    });
+    if (storeUnSubscriber != null) {
+        storeUnSubscriber();
+    }
+    return transformedRequest
 }
