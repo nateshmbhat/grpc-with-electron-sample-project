@@ -15,10 +15,18 @@
   const sendRequest = (e: any) => {
     appConfigStore.setRequestLiveEditState(LiveEditState.sendInitiated)
   }
+
+  const sendResponse = (e: any) => {
+    appConfigStore.setResponseLiveEditState(LiveEditState.sendInitiated)
+  }
 </script>
 
 <Button on:click={changeMode}>{networkTapMode}</Button>
 
 {#if networkTapMode == NetworkTapMode.liveEdit}
   <Button on:click={sendRequest}>Send Request</Button>
+{/if}
+
+{#if networkTapMode == NetworkTapMode.liveEdit}
+  <Button on:click={sendResponse}>Send Response</Button>
 {/if}

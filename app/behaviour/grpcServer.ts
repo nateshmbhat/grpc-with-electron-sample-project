@@ -25,6 +25,7 @@ function addGrpcServices(server: grpc.Server | null, serviceProtos: ProtoService
             callback(null, responseInfo.data)
           })
           .catch(e => {
+            console.error(e)
             callback(e, null)
           });
       };

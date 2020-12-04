@@ -19,7 +19,7 @@ var hello_world_package = grpc.loadPackageDefinition(packageDefinition);
  * Implements the SayHello RPC method.
  */
 function sayHello(call: any, callback: any) {
-  console.log('Request : ' , call)
+  console.log('Request : ', call)
   callback(null, { message: 'Hello ' + call.request.name });
 }
 
@@ -27,16 +27,16 @@ function sayHello(call: any, callback: any) {
  * Starts an RPC server that receives requests for the Greeter service at the
  * sample server port
  */
-export function startDummyGrpcTargetServer({ port}: { port: number }) {
+export function startDummyGrpcTargetServer({ port }: { port: number }) {
   var server = new grpc.Server();
   //@ts-ignore
   server.addService(hello_world_package.hello_world.Greeter['service'], { sayHello: sayHello });
   server.bindAsync(`localhost:${port}`, grpc.ServerCredentials.createInsecure(), (error, port) => {
     if (error) {
-      console.error(error , port)
+      console.error(error, port)
     }
     else {
-      console.log('Dummy Grpc Test Server started at port : ' , port)
+      console.log('Dummy Grpc Test Server started at port : ', port)
       server.start();
     }
   });

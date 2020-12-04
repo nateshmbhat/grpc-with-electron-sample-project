@@ -43,6 +43,7 @@ function createAppConfigStore() {
 
   return {
     subscribe,
+    getValue: async () => new Promise<AppConfigModel>((res, rej) => subscribe(config => res(config))()),
     setConfig: (config: AppConfigModel) => set(config),
     setSelectedRpc: (rpcInfo: RpcProtoInfo) => update((config) => ({ ...config, selectedRpc: rpcInfo })),
     setMockGrpcServerUrl: (url: string) => update((config) => ({ ...config, mockGrpcServerUrl: url })),
@@ -63,12 +64,12 @@ function createRequestResponseEditorStore() {
   })
   return {
     subscribe,
+    getValue: async () => new Promise<RequestResponseEditorModel>((res, rej) => subscribe(config => res(config))()),
     setRequest: (data: string) => update((store) => ({ ...store, requestText: data })),
     setResponse: (data: string) => update((store) => ({ ...store, responseText: data })),
     setValue: (data: RequestResponseEditorModel) => set(data)
   }
 }
-
 
 export const appConfigStore = createAppConfigStore();
 export const requestResponseEditorStore = createRequestResponseEditorStore();

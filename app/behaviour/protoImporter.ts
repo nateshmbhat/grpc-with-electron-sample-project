@@ -13,27 +13,23 @@ const commonProtosPath = [
   path.join(__static, '/home/nateshmbhat/Desktop/bloomrpc-svelte/static/sample/'),
 ];
 
-export type OnProtoUpload = (protoFiles: ProtoFile[], err?: Error) => void
 
 /**
  * Upload protofiles
  * @param onProtoUploaded
  * @param importPaths
  */
-export async function importProtos(onProtoUploaded: OnProtoUpload, importPaths?: string[]) {
+export async function importProtoFilesFromFilePicker(importPaths?: string[]): Promise<ProtoFile[]> {
   const result = await remote.dialog.showOpenDialog(remote.getCurrentWindow(), {
     properties: ['openFile', 'multiSelections'],
+    buttonLabel: 'Import Proto',
     filters: [
       { name: 'Protos', extensions: ['proto'] },
     ]
   });
-  console.log(result)
-  // async (filePaths: string[]) => {
-  //   if (!filePaths) {
-  //     return;
-  //   }
-  //   await loadProtos(filePaths, importPaths, onProtoUploaded);
-  // });
+  if (result.canceled) return []
+
+  return await loadProtos(result.filePaths, importPaths);
 }
 
 /**
@@ -42,42 +38,29 @@ export async function importProtos(onProtoUploaded: OnProtoUpload, importPaths?:
  * @param importPaths
  * @param onProtoUploaded
  */
-export async function loadProtos(filePaths: string[], importPaths?: string[], onProtoUploaded?: OnProtoUpload): Promise<ProtoFile[]> {
-  try {
-    const protos = await Promise.all(filePaths.map((fileName) =>
-      fromFileName(fileName, [
-        ...(importPaths ? importPaths : []),
-        ...commonProtosPath,
-      ])
-    ));
+//Throws Error when not able to load proto file
+export async function loadProtos(filePaths: string[], importPaths?: string[]): Promise<ProtoFile[]> {
+  const protos = await Promise.all(filePaths.map((fileName) =>
+    fromFileName(fileName, [
+      ...(importPaths ? importPaths : []),
+      ...commonProtosPath,
+    ])
+  ));
 
-    const protoList = protos.reduce((list: ProtoFile[], proto: Proto) => {
+  const protoList = protos.reduce((list: ProtoFile[], proto: Proto) => {
+    // Services with methods
+    const services = parseServices(proto);
 
-      // Services with methods
-      const services = parseServices(proto);
+    // Proto file
+    list.push({
+      proto,
+      fileName: proto.fileName.split(path.sep).pop() || "",
+      services,
+    });
 
-      // Proto file
-      list.push({
-        proto,
-        fileName: proto.fileName.split(path.sep).pop() || "",
-        services,
-      });
-
-      return list;
-    }, []);
-    onProtoUploaded && onProtoUploaded(protoList, undefined);
-    return protoList;
-
-  } catch (e) {
-    console.error(e);
-    onProtoUploaded && onProtoUploaded([], e);
-
-    if (!onProtoUploaded) {
-      throw e;
-    }
-
-    return [];
-  }
+    return list;
+  }, []);
+  return protoList;
 }
 
 /**
@@ -90,7 +73,6 @@ function parseServices(proto: Proto) {
     const requestMocks = mockRequestMethods(service);
     const responseMocks = mockResponseMethods(service);
     const serviceDefinition = serviceClientImpl.service
-    console.log('Service definition : ', serviceDefinition)
 
     const serviceObject: ProtoService = {
       serviceName: serviceName,
@@ -105,28 +87,17 @@ function parseServices(proto: Proto) {
     Object.keys(requestMocks)
       .forEach(methodName => serviceMethods[methodName] = new RpcProtoInfo(serviceObject, methodName))
     serviceObject.methods = serviceMethods
-    console.log('service object : ', serviceObject)
     services[serviceName] = serviceObject
   });
 
   return services;
 }
 
-export function importResolvePath(): Promise<string> {
-  return new Promise((resolve, reject) => {
-
-    const result = remote.dialog.showOpenDialog(remote.getCurrentWindow(), {
-      properties: ['openDirectory'],
-      filters: []
-    })
-    console.log(result);
-
-    // (filePaths: string[]) => {
-    //   if (!filePaths) {
-    //     return reject("No folder selected");
-    //   }
-    //   resolve(filePaths[0]);
-    // });
-  })
-
+export async function importProtoResolvePath(): Promise<string[]> {
+  const result = await remote.dialog.showOpenDialog(remote.getCurrentWindow(), {
+    properties: ['openDirectory'],
+    filters: []
+  });
+  if (result.canceled) return []
+  else return result.filePaths
 }

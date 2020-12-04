@@ -72,7 +72,9 @@ module.exports = {
 
   plugins: [
     new webpack.EnvironmentPlugin({
-      NODE_ENV: 'production'
+      NODE_ENV: 'production',
+      GRPC_TRACE: 'all',
+      GRPC_VERBOSITY: 'DEBUG',
     }),
     new webpack.NamedModulesPlugin(),
     new webpack.DefinePlugin({
@@ -82,7 +84,7 @@ module.exports = {
       DESCRIPTION: JSON.stringify(pkgDep.description),
       LICENSE: JSON.stringify(pkgDep.license),
       BUG_REPORT_URL: JSON.stringify(pkgDep.bugs.url),
-      VERSION: JSON.stringify(pkgDep.version)
+      VERSION: JSON.stringify(pkgDep.version),
     })
   ]
 };
