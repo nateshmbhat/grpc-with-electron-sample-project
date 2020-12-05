@@ -1,7 +1,3 @@
-import App from './App.svelte';
+import { startDummyGrpcTargetServer } from '../internals/testing/grpc/server/grpc-test-server'
 
-const app = new App({
-	target: document.body,
-});
-
-export default app;
+startDummyGrpcTargetServer({ port: 50053 })

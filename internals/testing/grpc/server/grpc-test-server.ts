@@ -1,7 +1,7 @@
 import * as grpc from '@grpc/grpc-js'
 import type { PackageDefinition } from '@grpc/grpc-js/build/src/make-client';
 
-var PROTO_PATH = __dirname + '/../static/sample/greeter-service.proto';
+var PROTO_PATH = '/home/nateshmbhat/Desktop/tap-wire/static/sample/greeter-service.proto';
 
 var protoLoader = require('@grpc/proto-loader');
 var packageDefinition: PackageDefinition = protoLoader.loadSync(
@@ -20,7 +20,9 @@ var hello_world_package = grpc.loadPackageDefinition(packageDefinition);
  */
 function sayHello(call: any, callback: any) {
   console.log('Request : ', call)
-  callback(null, { message: 'Hello ' + call.request.name });
+  setTimeout(() => {
+    callback(null, { message: 'Hello ' + call.request.name });
+  }, 100);
 }
 
 /**
@@ -37,6 +39,7 @@ export function startDummyGrpcTargetServer({ port }: { port: number }) {
     }
     else {
       console.log('Dummy Grpc Test Server started at port : ', port)
+      console.log(process.versions)
       server.start();
     }
   });
