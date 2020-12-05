@@ -1,7 +1,7 @@
 import * as grpc from '@grpc/grpc-js'
 import type { PackageDefinition } from '@grpc/grpc-js/build/src/make-client';
 
-var PROTO_PATH = '/home/nateshmbhat/Desktop/tap-wire/static/sample/greeter-service.proto';
+var PROTO_PATH = __dirname + '../../static/sample/greeter-service.proto';
 
 var protoLoader = require('@grpc/proto-loader');
 var packageDefinition: PackageDefinition = protoLoader.loadSync(
