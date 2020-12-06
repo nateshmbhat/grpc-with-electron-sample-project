@@ -3,17 +3,6 @@
   <head>
     <meta charset="utf-8">
     <title>Tap-Wire</title>
-    <script>
-      (function() {
-        if (!process.env.HOT) {
-          const link = document.createElement('link');
-          link.rel = 'stylesheet';
-          link.href = './dist/style.css';
-          // HACK: Writing the script path should be done with webpack
-          document.getElementsByTagName('head')[0].appendChild(link);
-        }
-      }());
-    </script>
   </head>
   <body>
     <div id="root"></div>
@@ -24,9 +13,7 @@
         // Dynamically insert the bundled app script in the renderer process
         const port = process.env.PORT || 1212;
         scripts.push(
-          (process.env.HOT)
-            ? 'http://localhost:' + port + '/dist/renderer.dev.js'
-            : './dist/app.renderer.prod.js'
+            'http://localhost:' + port + '/dist/renderer.dev.js'
         );
 
         document.write(

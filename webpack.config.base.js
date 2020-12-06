@@ -6,35 +6,11 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const path = require('path');
 const webpack = require('webpack');
 const fs = require('fs');
-const appDep = require('./app/package.json');
 const pkgDep = require('./package.json');
 
-// Find all the dependencies without a `main` property and add them as webpack externals
-function filterDepWithoutEntryPoints(dep) {
-  // Return true if we want to add a dependency to externals
-  try {
-    // If the root of the dependency has an index.js, return true
-    if (fs.existsSync(path.join(__dirname, `node_modules/${dep}/index.js`))) {
-      return false;
-    }
-    const pgkString = fs
-      .readFileSync(path.join(__dirname, `node_modules/${dep}/package.json`))
-      .toString();
-    const pkg = JSON.parse(pgkString);
-    const fields = ['main', 'module', 'jsnext:main', 'browser'];
-    return !fields.some(field => field in pkg);
-  } catch (e) {
-    console.log(e);
-    return true;
-  }
-}
 
 /** @type {webpack.Configuration} */
 module.exports = {
-  externals: [
-    ...Object.keys(appDep.externals || {}),
-    ...Object.keys(pkgDep.possibleExternals || {}).filter(filterDepWithoutEntryPoints)
-  ],
   module: {
     rules: [
       {
@@ -76,7 +52,6 @@ module.exports = {
       GRPC_TRACE: 'all',
       GRPC_VERBOSITY: 'DEBUG',
     }),
-    new webpack.NamedModulesPlugin(),
     new webpack.DefinePlugin({
       PRODUCT_NAME: JSON.stringify(pkgDep.productName),
       COPYRIGHT: JSON.stringify(pkgDep.license),

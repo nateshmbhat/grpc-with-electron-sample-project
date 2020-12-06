@@ -1,10 +1,9 @@
 import * as grpc from '@grpc/grpc-js'
-import type { PackageDefinition } from '@grpc/grpc-js/build/src/make-client';
 
-var PROTO_PATH = __dirname + '../../static/sample/greeter-service.proto';
+var PROTO_PATH = __dirname + '/greeter-service.proto';
 
 var protoLoader = require('@grpc/proto-loader');
-var packageDefinition: PackageDefinition = protoLoader.loadSync(
+var packageDefinition= protoLoader.loadSync(
   PROTO_PATH,
   {
     keepCase: true,
@@ -18,18 +17,18 @@ var hello_world_package = grpc.loadPackageDefinition(packageDefinition);
 /**
  * Implements the SayHello RPC method.
  */
-function sayHello(call: any, callback: any) {
+function sayHello(call, callback) {
   console.log('Request : ', call)
   setTimeout(() => {
     callback(null, { message: 'Hello ' + call.request.name });
-  }, 100);
+  }, 0);
 }
 
 /**
  * Starts an RPC server that receives requests for the Greeter service at the
  * sample server port
  */
-export function startDummyGrpcTargetServer({ port }: { port: number }) {
+export function startDummyGrpcTargetServer({ port }) {
   var server = new grpc.Server();
   //@ts-ignore
   server.addService(hello_world_package.hello_world.Greeter['service'], { sayHello: sayHello });
@@ -44,3 +43,6 @@ export function startDummyGrpcTargetServer({ port }: { port: number }) {
     }
   });
 }
+
+
+startDummyGrpcTargetServer({port:50053})
