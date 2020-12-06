@@ -35,9 +35,6 @@
       "dist/",
       "node_modules/",
       "app.html",
-      "about/about.html",
-      "main.prod.js",
-      "main.prod.js.map",
       "package.json"
     ],
     "dmg": {
@@ -86,8 +83,6 @@
   "keywords": [
     "gRPC",
     "GUI",
-    "bloomRPC",
-    "BloomRPC",
     "gRPC GUI"
   ],
   "homepage": "https://github.com/nateshmbhat/tap-wire",
