@@ -21,7 +21,7 @@ function sayHello(call, callback) {
   console.log('Request : ', call)
   setTimeout(() => {
     callback(null, { message: 'Hello ' + call.request.name });
-  }, 0);
+  }, 10);
 }
 
 /**
