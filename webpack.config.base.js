@@ -12,24 +12,7 @@ const pkgDep = require('./package.json');
 /** @type {webpack.Configuration} */
 module.exports = {
   module: {
-    rules: [
-      {
-        test: /\.(html|svelte)$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'svelte-loader',
-          options: {
-            preprocess: require('svelte-preprocess')(),
-            hotReload:false 
-          }
-        }
-      },
-      {
-        test: /\.ts?$/,
-        loaders: ['ts-loader'],
-        exclude: /node_modules/
-      }
-    ]
+    rules: []
   },
 
   output: {
@@ -42,7 +25,7 @@ module.exports = {
    * Determine the array of extensions that should be used to resolve modules.
    */
   resolve: {
-    extensions: ['.mjs','.js', '.json', '.ts', '.svelte'],
+    extensions: ['.mjs', '.js', '.json', '.ts', '.svelte'],
     modules: [path.join(__dirname, 'app'), 'node_modules']
   },
 
@@ -52,14 +35,5 @@ module.exports = {
       GRPC_TRACE: 'all',
       GRPC_VERBOSITY: 'DEBUG',
     }),
-    new webpack.DefinePlugin({
-      PRODUCT_NAME: JSON.stringify(pkgDep.productName),
-      COPYRIGHT: JSON.stringify(pkgDep.license),
-      HOMEPAGE: JSON.stringify(pkgDep.homepage),
-      DESCRIPTION: JSON.stringify(pkgDep.description),
-      LICENSE: JSON.stringify(pkgDep.license),
-      BUG_REPORT_URL: JSON.stringify(pkgDep.bugs.url),
-      VERSION: JSON.stringify(pkgDep.version),
-    })
   ]
 };

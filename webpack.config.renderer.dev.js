@@ -37,7 +37,8 @@ module.exports = merge.smart(baseConfig, {
   },
 
   module: {
-    rules: []
+    rules: [
+    ]
   },
 
   plugins: [
@@ -87,7 +88,6 @@ module.exports = merge.smart(baseConfig, {
       disableDotRule: false
     },
     before() {
-      if (process.env.START_HOT) {
         console.log('Starting Main Process...');
         spawn('npm', ['run', 'start-main-dev'], {
             shell: true,
@@ -96,7 +96,6 @@ module.exports = merge.smart(baseConfig, {
           })
           .on('close', code => process.exit(code))
           .on('error', spawnError => console.error(spawnError));
-      }
     }
   }
 });
